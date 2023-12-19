@@ -1,0 +1,51 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String            @id @default(cuid())
+  name        String
+  email       String            @unique
+  password    String
+  role        UserRole          @default(user)
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  viewedPosts UserViewedPosts[]
+  posts       Post[]
+
+  @@map("users")
+}
+
+model UserViewedPosts {
+  userId   String
+  postId   String
+  viewedAt DateTime @default(now())
+  post     Post     @relation(fields: [postId], references: [id])
+  user     User     @relation(fields: [userId], references: [id])
+
+  @@unique([userId, postId])
+  @@index([userId, postId])
+}
+
+model Post {
+  id         String            @id @default(cuid())
+  title      String
+  content    String
+  authorId   String
+  pulishedAt DateTime          @default(now())
+  updatedAt  DateTime          @updatedAt
+  viewers    UserViewedPosts[]
+  author     User              @relation(fields: [authorId], references: [id])
+
+  @@map("posts")
+}
+
+enum UserRole {
+  admin
+  user
+}
