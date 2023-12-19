@@ -14,7 +14,7 @@ import { User } from "src/users/entities/user.entity";
 import { UtilsService } from "src/utils/utils.service";
 import { LoginInput } from "./dto/login-input";
 import { RegisterInput } from "./dto/register-input";
-import { JwtPayload } from "./types";
+import { JwtPayload, Role } from "./types";
 
 @Injectable()
 export class AuthService {
@@ -55,6 +55,7 @@ export class AuthService {
 
     const { accessToken, refreshToken } = await this.createTokens({
       id: user.id,
+      role: user.role as Role,
     });
 
     await this.updateRefreshToken(user.id, refreshToken);
@@ -95,6 +96,7 @@ export class AuthService {
 
     const { accessToken, refreshToken } = await this.createTokens({
       id: user.id,
+      role: user.role as Role,
     });
 
     await this.updateRefreshToken(user.id, refreshToken);
@@ -120,7 +122,7 @@ export class AuthService {
   async refreshTokens(userId: string, refreshToken: string) {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
-      select: { id: true, refreshToken: true },
+      select: { id: true, refreshToken: true, role: true },
     });
 
     if (!user || !user.refreshToken)
@@ -135,6 +137,7 @@ export class AuthService {
 
     const { accessToken: at, refreshToken: rt } = await this.createTokens({
       id: user.id,
+      role: user.role as Role,
     });
     await this.updateRefreshToken(user.id, rt);
 

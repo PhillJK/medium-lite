@@ -30,28 +30,20 @@ type AuthResponseWithUser {
 type Query {
   users: [User!]!
   user(id: Int!): User!
+  getPosts: Int!
 }
 
 type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
-  updateUser(updateUserInput: UpdateUserInput!): User!
-  removeUser(id: Int!): User!
   register(registerInput: RegisterInput!): AuthResponseWithUser!
   login(loginInput: LoginInput!): AuthResponseWithUser!
   logout: Boolean!
   refreshTokens: AuthResponse!
-  getPosts: Boolean!
 }
 
 input CreateUserInput {
   """Example field (placeholder)"""
   exampleField: Int!
-}
-
-input UpdateUserInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
 }
 
 input RegisterInput {
