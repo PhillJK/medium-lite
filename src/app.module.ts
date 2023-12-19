@@ -5,9 +5,10 @@ import { join } from "path";
 import { UsersModule } from "./users/users.module";
 import { AuthModule } from "./auth/auth.module";
 import { PostsModule } from "./posts/posts.module";
-import { PrismaService } from "./prisma/prisma.service";
 import { ConfigModule } from "@nestjs/config";
-import { UtilsService } from "./utils/utils.service";
+import { APP_GUARD } from "@nestjs/core";
+import { JwtAuthGuard } from "./utils/guards/jwt-auth.guard";
+import { PrismaModule } from "./prisma/prisma.module";
 
 @Module({
   imports: [
@@ -19,7 +20,8 @@ import { UtilsService } from "./utils/utils.service";
     UsersModule,
     AuthModule,
     PostsModule,
+    PrismaModule,
   ],
-  providers: [PrismaService, UtilsService],
+  providers: [{ provide: APP_GUARD, useClass: JwtAuthGuard }],
 })
 export class AppModule {}

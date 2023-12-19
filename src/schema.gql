@@ -16,7 +16,12 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
-type LoginResponse {
+type AuthResponse {
+  accessToken: String!
+  refreshToken: String!
+}
+
+type AuthResponseWithUser {
   accessToken: String!
   refreshToken: String!
   user: User!
@@ -31,8 +36,11 @@ type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
   removeUser(id: Int!): User!
-  register(registerInput: RegisterInput!): LoginResponse!
-  login(loginInput: LoginInput!): LoginResponse!
+  register(registerInput: RegisterInput!): AuthResponseWithUser!
+  login(loginInput: LoginInput!): AuthResponseWithUser!
+  logout: Boolean!
+  refreshTokens: AuthResponse!
+  getPosts: Boolean!
 }
 
 input CreateUserInput {
