@@ -34,14 +34,14 @@ model UserViewedPosts {
 }
 
 model Post {
-  id         String            @id @default(cuid())
-  title      String
-  content    String
-  authorId   String
-  pulishedAt DateTime          @default(now())
-  updatedAt  DateTime          @updatedAt
-  viewers    UserViewedPosts[]
-  author     User              @relation(fields: [authorId], references: [id])
+  id          String            @id @default(cuid())
+  title       String
+  content     String
+  authorId    String
+  publishedAt DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  viewers     UserViewedPosts[]
+  author      User              @relation(fields: [authorId], references: [id])
 
   @@map("posts")
 }

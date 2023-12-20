@@ -31,7 +31,7 @@ export class UsersResolver {
   @Query(() => User, { name: "user", nullable: true })
   async findOneUser(
     @Args("id", { type: () => String }) id: string,
-  ): Promise<User> {
+  ): Promise<User | null> {
     return await this.usersService.findOneUser(id);
   }
 }

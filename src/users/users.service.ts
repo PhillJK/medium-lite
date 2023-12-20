@@ -79,8 +79,8 @@ export class UsersService {
     };
   }
 
-  async findOneUser(id: string): Promise<User> {
-    const user = await this.prisma.user.findFirst({
+  async findOneUser(id: string): Promise<User | null> {
+    return await this.prisma.user.findFirst({
       where: { id },
       select: {
         id: true,
@@ -91,7 +91,5 @@ export class UsersService {
         updatedAt: true,
       },
     });
-
-    return user as User;
   }
 }

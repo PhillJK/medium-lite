@@ -36,10 +36,25 @@ type AuthResponseWithUser {
   user: User!
 }
 
+type Post {
+  id: ID!
+  title: String!
+  content: String!
+  authorId: String!
+  publishedAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type GetPostsResponse {
+  nextCursor: String
+  posts: [Post!]!
+}
+
 type Query {
   users(page: Int = 0, limit: Int = 10): GetUsersResponse
   user(id: String!): User
-  getPosts: Int!
+  post(id: String!): Post
+  posts(cursor: String, limit: Int = 10): GetPostsResponse!
 }
 
 type Mutation {
@@ -48,6 +63,7 @@ type Mutation {
   login(loginInput: LoginInput!): AuthResponseWithUser!
   logout: Boolean!
   refreshTokens: AuthResponse!
+  createPost(createPostInput: CreatePostInput!): Post!
 }
 
 input CreateUserInput {
@@ -66,4 +82,9 @@ input RegisterInput {
 input LoginInput {
   email: String!
   password: String!
+}
+
+input CreatePostInput {
+  title: String!
+  content: String!
 }
