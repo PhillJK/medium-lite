@@ -17,6 +17,6 @@ export class RegisterInput {
   @IsNotEmpty()
   @IsString()
   @Field()
-  @MinLength(1)
+  @MinLength(2)
   name: string;
 }

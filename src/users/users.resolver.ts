@@ -1,9 +1,11 @@
-import { Resolver, Query, Mutation, Args, Int } from "@nestjs/graphql";
+import { Resolver, Query, Mutation, Args } from "@nestjs/graphql";
 import { UsersService } from "./users.service";
 import { User } from "./entities/user.entity";
-import { CreateUserInput } from "./dto/create-user.input";
+import { CreateUserInput } from "./dto/create-user-input";
 import { Roles } from "src/utils/decorators/role.decorator";
 import { Role } from "src/auth/types";
+import { GetUsersArgs } from "./dto/get-users-args";
+import { GetUsersResponse } from "./dto/get-users-response";
 
 @Resolver(() => User)
 export class UsersResolver {
@@ -11,19 +13,25 @@ export class UsersResolver {
 
   @Roles(Role.Admin)
   @Mutation(() => User)
-  createUser(@Args("createUserInput") createUserInput: CreateUserInput) {
-    return this.usersService.create(createUserInput);
+  async createUser(
+    @Args("createUserInput") createUserInput: CreateUserInput,
+  ): Promise<User> {
+    return await this.usersService.create(createUserInput);
   }
 
   @Roles(Role.Admin)
-  @Query(() => [User], { name: "users" })
-  findAll() {
-    return this.usersService.findAll();
+  @Query(() => GetUsersResponse, { name: "users", nullable: true })
+  async findAllUsers(
+    @Args() { page, limit }: GetUsersArgs,
+  ): Promise<GetUsersResponse> {
+    return await this.usersService.findUsers(page, limit);
   }
 
   @Roles(Role.Admin)
-  @Query(() => User, { name: "user" })
-  findOne(@Args("id", { type: () => Int }) id: number) {
-    return this.usersService.findOne(id);
+  @Query(() => User, { name: "user", nullable: true })
+  async findOneUser(
+    @Args("id", { type: () => String }) id: string,
+  ): Promise<User> {
+    return await this.usersService.findOneUser(id);
   }
 }

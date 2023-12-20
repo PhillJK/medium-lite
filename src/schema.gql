@@ -16,6 +16,15 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type GetUsersResponse {
+  hasNextPage: Boolean!
+  nextPage: Int!
+  limit: Int!
+  totalPages: Int!
+  totalNumberOfUsers: Int!
+  users: [User!]!
+}
+
 type AuthResponse {
   accessToken: String!
   refreshToken: String!
@@ -28,8 +37,8 @@ type AuthResponseWithUser {
 }
 
 type Query {
-  users: [User!]!
-  user(id: Int!): User!
+  users(page: Int = 0, limit: Int = 10): GetUsersResponse
+  user(id: String!): User
   getPosts: Int!
 }
 
@@ -42,8 +51,10 @@ type Mutation {
 }
 
 input CreateUserInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  email: String!
+  name: String!
+  role: String!
+  password: String!
 }
 
 input RegisterInput {
