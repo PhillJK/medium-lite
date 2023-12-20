@@ -2,8 +2,6 @@ import {
   BadRequestException,
   ConflictException,
   ForbiddenException,
-  HttpException,
-  HttpStatus,
   Injectable,
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
