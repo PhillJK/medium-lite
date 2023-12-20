@@ -15,6 +15,7 @@ import { UtilsService } from "src/utils/utils.service";
 import { LoginInput } from "./dto/login-input";
 import { RegisterInput } from "./dto/register-input";
 import { JwtPayload, Role } from "./types";
+import { AuthResponse, AuthResponseWithUser } from "./dto/auth-response";
 
 @Injectable()
 export class AuthService {
@@ -25,7 +26,9 @@ export class AuthService {
     private readonly utils: UtilsService,
   ) {}
 
-  async registerUser(registerInput: RegisterInput) {
+  async registerUser(
+    registerInput: RegisterInput,
+  ): Promise<AuthResponseWithUser> {
     const userExists = await this.prisma.user.findUnique({
       where: { email: registerInput.email },
       select: { id: true },
@@ -67,7 +70,7 @@ export class AuthService {
     };
   }
 
-  async login(loginInput: LoginInput) {
+  async login(loginInput: LoginInput): Promise<AuthResponseWithUser> {
     const user = await this.prisma.user.findUnique({
       where: { email: loginInput.email },
       select: {
@@ -119,7 +122,10 @@ export class AuthService {
     });
   }
 
-  async refreshTokens(userId: string, refreshToken: string) {
+  async refreshTokens(
+    userId: string,
+    refreshToken: string,
+  ): Promise<AuthResponse> {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
       select: { id: true, refreshToken: true, role: true },

@@ -39,7 +39,9 @@ export class AuthResolver {
   @Public()
   @UseGuards(JwtRefreshAuthGuard)
   @Mutation(() => AuthResponse)
-  async refreshTokens(@GetCurrentUser() user: JwtPayloadWithRefreshToken) {
+  async refreshTokens(
+    @GetCurrentUser() user: JwtPayloadWithRefreshToken,
+  ): Promise<AuthResponse> {
     return await this.authService.refreshTokens(user.id, user.refreshToken);
   }
 }
